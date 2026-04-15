@@ -1,0 +1,11 @@
+Id,Nombre,Sku,Categoria,Precio,Proveedor
+1,Laptop Dell XPS 13,DELL-XPS-13,Electronica,1200.00,Dell Latam
+2,Monitor LG 27 Pulgadas,LG-27-4K,Electronica,350.00,LG Electronics
+3, Silla Ergonomica Oficina ,CHAIR-ERG-01,Muebles,250.00,Muebles RD
+4,teclado mecanico rgb,KB-RGB-01,Accesorios,85.50,TechSupplies
+5,Mouse Inalambrico Pro,MS-WLS-02,Accesorios,45.00,TechSupplies
+6,Escritorio de Madera Roble,DESK-WD-05,Muebles,150.00,Muebles RD
+7,Impresora Laser HP,HP-LSR-JET,Electronica,210.00,HP Store
+8,Cable HDMI 2.1,CBL-HDMI-01,Accesorios,15.99,TechSupplies
+9,Lampara de Escritorio LED,LAMP-LED-01,Iluminacion,30.00,IKEA
+10,Disco Duro Externo 1TB,HDD-EXT-1TB,Almacenamiento,65.00,Seagate

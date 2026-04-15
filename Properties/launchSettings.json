@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Inventario.ETL": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
