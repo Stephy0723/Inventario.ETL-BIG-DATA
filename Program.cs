@@ -3,19 +3,29 @@ using CsvHelper;
 using Inventario.ETL.Data;
 using Inventario.ETL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
+// Cargar configuración
+var config = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
+
+var connectionString = config.GetConnectionString("DwhConnection")
+    ?? throw new InvalidOperationException("No se encontró la cadena de conexión 'DwhConnection' en appsettings.json.");
 
 Console.WriteLine("=== SISTEMA DE CARGA DATA WAREHOUSE (ETL) ===");
 
 try
 {
-    using (var db = new DwhContext())
+    using (var db = new DwhContext(connectionString))
     {
         // Crear la base de datos y la tabla automáticamente si no existen
         Console.WriteLine("Verificando base de datos...");
         db.Database.EnsureCreated();
 
         // 1. EXTRACT: Leer el CSV
-        string path = "Source/Inventario_Fuente.csv";
+        string path = Path.Combine(AppContext.BaseDirectory, "Source", "Inventario_Fuente.csv");
 
         if (!File.Exists(path))
         {

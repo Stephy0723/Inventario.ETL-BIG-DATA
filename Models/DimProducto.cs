@@ -4,6 +4,7 @@ namespace Inventario.ETL.Models
 {
     public class DimProducto
     {
+        [Key]
         public int ProductoKey { get; set; }
         public int IdOriginal { get; set; }
         public string Sku { get; set; }

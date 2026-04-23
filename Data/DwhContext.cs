@@ -1,15 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Inventario.ETL.Models; // <--- Esta línea es la que da el error CS0234 si no coinciden
+using Inventario.ETL.Models;
 
 namespace Inventario.ETL.Data
 {
     public class DwhContext : DbContext
     {
+        private readonly string _connectionString;
+
+        public DwhContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         public DbSet<DimProducto> DimProductos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer("Server=localhost;Database=DWH_Inventario;Trusted_Connection=True;TrustServerCertificate=True;");
+            options.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString));
         }
     }
 }
