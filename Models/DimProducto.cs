@@ -7,9 +7,9 @@ namespace Inventario.ETL.Models
         [Key]
         public int ProductoKey { get; set; }
         public int IdOriginal { get; set; }
-        public string Sku { get; set; }
-        public string Nombre { get; set; }
-        public string Categoria { get; set; }
+        public string Sku { get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
+        public string Categoria { get; set; } = string.Empty;
         public decimal Precio { get; set; }
         public DateTime FechaCarga { get; set; }
     }

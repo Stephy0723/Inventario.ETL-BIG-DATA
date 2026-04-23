@@ -4,6 +4,8 @@ using Inventario.ETL.Data;
 using Inventario.ETL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.IO;
+using QuestPDF.Infrastructure;
 
 // Cargar configuración
 var config = new ConfigurationBuilder()
@@ -13,6 +15,9 @@ var config = new ConfigurationBuilder()
 
 var connectionString = config.GetConnectionString("DwhConnection")
     ?? throw new InvalidOperationException("No se encontró la cadena de conexión 'DwhConnection' en appsettings.json.");
+
+// Configurar licencia Community de QuestPDF
+QuestPDF.Settings.License = LicenseType.Community;
 
 Console.WriteLine("=== SISTEMA DE CARGA DATA WAREHOUSE (ETL) ===");
 
@@ -43,10 +48,12 @@ try
             var listaDimensiones = registros.Select(r => new DimProducto
             {
                 IdOriginal = int.Parse(r.Id),
-                Sku = r.Sku,
-                Nombre = ((string)r.Nombre).ToUpper().Trim(), // Limpieza y normalización
-                Categoria = r.Categoria ?? "Sin Categoría",
-                Precio = decimal.Parse(r.Precio, CultureInfo.InvariantCulture),
+                Sku = ((string)r.Sku).Trim().ToUpperInvariant(),
+                Nombre = ((string)r.Nombre).Trim().ToUpperInvariant(),
+                Categoria = string.IsNullOrWhiteSpace((string?)r.Categoria)
+                    ? "Sin categoria"
+                    : ((string)r.Categoria).Trim(),
+                Precio = decimal.Parse(((string)r.Precio).Trim(), CultureInfo.InvariantCulture),
                 FechaCarga = DateTime.Now
             }).ToList();
 
@@ -62,6 +69,11 @@ try
             Console.WriteLine($"\n¡Éxito!");
             Console.WriteLine($"Se procesaron y cargaron {listaDimensiones.Count} productos correctamente.");
         }
+
+        // Generar graficos y tablero a partir de los datos reales cargados
+        var resumenInventario = GeneradorGraficos.CrearGraficosInventario(db.DimProductos.AsNoTracking().ToList());
+        TableroVentasPDF.GenerarPDF("TableroVentas.pdf", resumenInventario);
+        Console.WriteLine("Tablero de ventas PDF generado: TableroVentas.pdf");
     }
 }
 catch (Exception ex)
